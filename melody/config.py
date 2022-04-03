@@ -2,17 +2,15 @@ from __future__ import annotations
 
 import inspect
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, List, cast
 
 
 @dataclass
 class Config:
     token: str = "DISCORD TOKEN"
-    db_name: str = "DATABASE NAME"
-    db_user: str = "DATABASE USER"
-    db_password: str = "DATABASE PASSWORD"
+    owners: List[str] = field(default_factory=list)
 
     def save(self) -> None:
         pth = Path("config.json")
