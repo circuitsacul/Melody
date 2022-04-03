@@ -74,6 +74,35 @@ class Leave:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
+@crescent.command(
+    name="volume", description="Set the volume of the current song."
+)
+class SetVolume:
+    volume = crescent.option(
+        int,
+        "The volume to set the player to.",
+        min_value=0,
+        max_value=100,
+        default=100,
+    )
+
+    async def callback(self, ctx: crescent.Context) -> None:
+        bot = cast("Bot", ctx.app)
+        assert ctx.guild_id is not None
+
+        await bot.verify_vc(ctx.guild_id)
+        player = bot.players.get(ctx.guild_id)
+        if player is None:
+            raise MelodyErr("I am not in a voice channel.")
+        if player.queue.track_handle is None:
+            raise MelodyErr("There's no song playing.")
+        player.queue.track_handle.set_volume(self.volume / 100)
+        await ctx.respond(f"Volume set to {self.volume}%.")
+
+
+@plugin.include
+@crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="pause", description="Pause the current song.")
 class PauseQueue:
     async def callback(self, ctx: crescent.Context) -> None:
