@@ -3,7 +3,7 @@ line-length=79
 skip-magic-trailing-comma=true
 
 [tool.poetry]
-name = "music"
+name = "melody"
 version = "0"
 description = "A music bot written in python (with rust bindings) with support for YouTube."
 authors = ["CircuitSacul <circuitsacul@icloud.com>"]
@@ -14,6 +14,7 @@ python = "^3.8,<3.11"
 hikari = "^2.0.0-alpha.108"
 hikari-crescent = "^0.1.0-beta.9"
 songbird-py = "^0.1.6"
+apgorm = "^1.0.0-beta.8"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

@@ -13,7 +13,7 @@ def pytest_and_mypy(session: nox.Session) -> None:
         "python",
         "-m",
         "pytest",
-        "--cov=music/",
+        "--cov=melody/",
         "--cov-report=xml",
     )
 
