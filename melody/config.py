@@ -4,13 +4,14 @@ import inspect
 import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, List, cast
+from typing import Any, List, Optional, cast
 
 
 @dataclass
 class Config:
     token: str = "DISCORD TOKEN"
     owners: List[str] = field(default_factory=list)
+    guild: Optional[int] = None
 
     def save(self) -> None:
         pth = Path("config.json")
