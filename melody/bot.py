@@ -75,6 +75,11 @@ class Bot(crescent.Bot):
             if channel is None:
                 await self.leave_vc(guild)
                 return
+            connected = self.cache.get_voice_states_view_for_channel(
+                channel.guild_id, channel
+            )
+            if len(connected) == 1:  # Bot is the only one in the channel
+                await self.leave_vc(guild)
 
     async def join_vc(self, guild: int, channel: int) -> bool:
         await self.verify_vc(guild)
