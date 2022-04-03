@@ -46,6 +46,21 @@ class PlaySong:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.command(name="leave")
+class Leave:
+    async def callback(self, ctx: crescent.Context) -> None:
+        bot = cast("Bot", ctx.app)
+        assert ctx.guild_id is not None
+
+        ret = await bot.leave_vc(ctx.guild_id)
+        if ret:
+            await ctx.respond("Disconnected from voice channel.")
+        else:
+            await ctx.respond("I am not in a voice channel.")
+
+
+@plugin.include
+@crescent.hook(guild_only)
 @crescent.command(name="pause")
 class PauseQueue:
     async def callback(self, ctx: crescent.Context) -> None:

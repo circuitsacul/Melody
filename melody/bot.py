@@ -65,14 +65,18 @@ class Bot(crescent.Bot):
             if not voice:
                 return
             if not voice.voicebox.is_alive:
-                return await self.leave_vc(guild)
+                await self.leave_vc(guild)
+                return
             if not self.voice.connections.get(hikari.Snowflake(guild)):
-                return await self.leave_vc(guild)
+                await self.leave_vc(guild)
+                return
             if not self.cache.get_voice_state(guild, self.me.id):
-                return await self.leave_vc(guild)
+                await self.leave_vc(guild)
+                return
             channel = self.cache.get_guild_channel(voice.voicebox.channel_id)
             if channel is None:
-                return await self.leave_vc(guild)
+                await self.leave_vc(guild)
+                return
 
     async def join_vc(self, guild: int, channel: int) -> bool:
         await self.verify_vc(guild)
@@ -87,10 +91,10 @@ class Bot(crescent.Bot):
             )
         return True
 
-    async def leave_vc(self, guild: int) -> None:
+    async def leave_vc(self, guild: int) -> bool:
         voice = self.players.pop(guild, None)
         if not voice:
-            return
+            return False
         try:
             await voice.voicebox.leave()
         except Exception:
@@ -101,6 +105,8 @@ class Bot(crescent.Bot):
                 await vc.disconnect()
         except Exception:
             pass
+
+        return True
 
     async def play_url(self, guild: int, url: str) -> None:
         async with self.lock(guild):
