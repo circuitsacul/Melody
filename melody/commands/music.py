@@ -6,7 +6,7 @@ import crescent
 
 from melody.exceptions import MelodyErr
 
-from .checks import guild_only
+from .checks import guild_only, vc_match
 
 if TYPE_CHECKING:
     from melody.bot import Bot
@@ -23,6 +23,7 @@ async def on_err(err: MelodyErr, ctx: crescent.Context) -> None:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="play")
 class PlaySong:
     url = crescent.option(str, "The URL of the song to play.")
@@ -46,6 +47,7 @@ class PlaySong:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="leave")
 class Leave:
     async def callback(self, ctx: crescent.Context) -> None:
@@ -61,6 +63,7 @@ class Leave:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="pause")
 class PauseQueue:
     async def callback(self, ctx: crescent.Context) -> None:
@@ -77,6 +80,7 @@ class PauseQueue:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="resume")
 class ResumeQueue:
     async def callback(self, ctx: crescent.Context) -> None:
@@ -93,6 +97,7 @@ class ResumeQueue:
 
 @plugin.include
 @crescent.hook(guild_only)
+@crescent.hook(vc_match)
 @crescent.command(name="skip")
 class SkipTrack:
     async def callback(self, ctx: crescent.Context) -> None:

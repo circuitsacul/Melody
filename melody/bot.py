@@ -26,9 +26,7 @@ class Player:
 class Bot(crescent.Bot):
     def __init__(self) -> None:
         super().__init__(
-            token=CONFIG.token,
-            intents=INTENTS,
-            default_guild=CONFIG.guild,
+            token=CONFIG.token, intents=INTENTS, default_guild=CONFIG.guild
         )
 
         self.players: dict[int, Player] = {}
