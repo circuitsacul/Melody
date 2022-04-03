@@ -3,7 +3,7 @@ line-length=79
 skip-magic-trailing-comma=true
 
 [tool.poetry]
-name = "music"
+name = "melody"
 version = "0"
 description = "A music bot written in python (with rust bindings) with support for YouTube."
 authors = ["CircuitSacul <circuitsacul@icloud.com>"]
