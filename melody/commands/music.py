@@ -3,7 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 import crescent
+import hikari
 
+from melody.config import CONFIG
 from melody.exceptions import MelodyErr
 
 from .checks import guild_only, vc_match
@@ -126,21 +128,28 @@ class ShowQueue:
 
         np = player.queue.track_handle
 
-        upcoming_titles = []
+        upcoming: list[str] = []
         for track in player.queue:
-            upcoming_titles.append((await track.metadata()).title)
+            meta = await track.metadata()
+            upcoming.append(f"[{meta.title}](<{meta.source_url}>)")
 
-        if np is None and not len(upcoming_titles):
+        if np is None and not len(upcoming):
             raise MelodyErr("The queue is empty!")
-        await ctx.respond(
-            (
-                f"Now playing: **{np.metadata.title}**\n"
-                if np is not None
-                else "Nothing playing right now.\n"
-            )
-            + (
-                "Upcoming:\n-" + "\n-".join(upcoming_titles)
-                if upcoming_titles
-                else "Nothing upcoming."
-            )
+        embed = hikari.Embed(
+            title="Queue",
+            color=CONFIG.theme,
+            description=(
+                (
+                    f"Now playing: [{np.metadata.title}]"
+                    f"(<{np.metadata.source_url}>)"
+                    if np
+                    else "Nothing playing right now."
+                )
+                + (
+                    "\n\nUpcoming:\n{}".format("\n".join(upcoming))
+                    if upcoming
+                    else ""
+                )
+            ),
         )
+        await ctx.respond(embed=embed)

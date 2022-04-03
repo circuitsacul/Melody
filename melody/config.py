@@ -12,6 +12,7 @@ class Config:
     token: str = "DISCORD TOKEN"
     owners: List[str] = field(default_factory=list)
     guild: Optional[int] = None
+    theme: int = 0x9457CE
 
     def save(self) -> None:
         pth = Path("config.json")
