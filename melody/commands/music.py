@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 from typing import TYPE_CHECKING, cast
 
 import crescent
@@ -15,6 +16,11 @@ if TYPE_CHECKING:
 
 
 plugin = crescent.Plugin("music")
+
+
+def song_infostr(meta) -> str:
+    length = str(datetime.timedelta(seconds=meta.duration))
+    return f"[{meta.title}](<{meta.source_url}>) ({length})"
 
 
 @plugin.include
@@ -131,7 +137,7 @@ class ShowQueue:
         upcoming: list[str] = []
         for track in player.queue:
             meta = await track.metadata()
-            upcoming.append(f"[{meta.title}](<{meta.source_url}>)")
+            upcoming.append(song_infostr(meta))
 
         if np is None and not len(upcoming):
             raise MelodyErr("The queue is empty!")
@@ -140,8 +146,7 @@ class ShowQueue:
             color=CONFIG.theme,
             description=(
                 (
-                    f"Now playing: [{np.metadata.title}]"
-                    f"(<{np.metadata.source_url}>)"
+                    f"Now playing: {song_infostr(np.metadata)}"
                     if np
                     else "Nothing playing right now."
                 )
