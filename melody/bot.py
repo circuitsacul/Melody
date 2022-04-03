@@ -7,7 +7,7 @@ from typing import AsyncIterator
 
 import crescent
 import hikari
-from songbird import Queue, ytdl
+from songbird import Queue, Source, ytdl
 from songbird.hikari import Voicebox
 
 from melody.exceptions import MelodyErr
@@ -111,11 +111,16 @@ class Bot(crescent.Bot):
 
         return True
 
-    async def play_url(self, guild: int, url: str) -> None:
+    async def play_url(self, guild: int, url: str) -> Source:
         async with self.lock(guild):
             voice = self.players.get(guild)
             if not voice:
                 raise MelodyErr("I am not in a voice channel!")
             if len(voice.queue) >= 10:
                 raise MelodyErr("Too many songs in queue!")
-            voice.queue.append(await ytdl(url))
+            try:
+                source = await ytdl(url)
+            except Exception:
+                raise MelodyErr("Invalid URL!")
+            voice.queue.append(source)
+        return source

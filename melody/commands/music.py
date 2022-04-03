@@ -49,15 +49,17 @@ class PlaySong:
         else:
             await ctx.defer()
 
-        await bot.play_url(ctx.guild_id, self.url)
-        await ctx.respond("Song added to queue.")
+        source = await bot.play_url(ctx.guild_id, self.url)
+        await ctx.respond(
+            "Added to queue: " + song_infostr(await source.metadata())
+        )
 
 
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
 @crescent.command(
-    name="leave", description="Cleare the queue and leave the voice channel."
+    name="leave", description="Clear the queue and leave the voice channel."
 )
 class Leave:
     async def callback(self, ctx: crescent.Context) -> None:
