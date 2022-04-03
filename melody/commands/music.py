@@ -32,7 +32,7 @@ async def on_err(err: MelodyErr, ctx: crescent.Context) -> None:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="play")
+@crescent.command(name="play", description="Play a song from URL.")
 class PlaySong:
     url = crescent.option(str, "The URL of the song to play.")
 
@@ -56,7 +56,9 @@ class PlaySong:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="leave")
+@crescent.command(
+    name="leave", description="Cleare the queue and leave the voice channel."
+)
 class Leave:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -72,7 +74,7 @@ class Leave:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="pause")
+@crescent.command(name="pause", description="Pause the current song.")
 class PauseQueue:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -89,7 +91,7 @@ class PauseQueue:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="resume")
+@crescent.command(name="resume", description="Resume the current song.")
 class ResumeQueue:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -106,7 +108,7 @@ class ResumeQueue:
 @plugin.include
 @crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="skip")
+@crescent.command(name="skip", description="Skip the current song.")
 class SkipTrack:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -122,7 +124,9 @@ class SkipTrack:
 
 @plugin.include
 @crescent.hook(guild_only)
-@crescent.command(name="queue")
+@crescent.command(
+    name="queue", description="Show the currently playing and upcoming songs."
+)
 class ShowQueue:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
