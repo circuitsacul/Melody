@@ -46,8 +46,9 @@ class Bot(crescent.Bot):
 
     def run_shell(self, command: str) -> str:
         f = StringIO()
-        with redirect_stdout(f), redirect_stderr(f):
-            os.system(command)
+        with redirect_stderr(f):
+            with redirect_stdout(f):
+                os.system(command)
         return f.getvalue()
 
     async def exec_code(
@@ -61,12 +62,13 @@ class Bot(crescent.Bot):
 
         lcls: dict[str, Any] = {}
         f = StringIO()
-        with (redirect_stdout(f), redirect_stderr(f)):
-            try:
-                exec(code, glbls, lcls)
-                result = await lcls["result"]
-            except Exception:
-                return traceback.format_exc(), None
+        with redirect_stderr(f):
+            with redirect_stdout(f):
+                try:
+                    exec(code, glbls, lcls)
+                    result = await lcls["result"]
+                except Exception:
+                    return traceback.format_exc(), None
 
         return f.getvalue(), result
 

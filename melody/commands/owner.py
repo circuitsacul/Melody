@@ -22,7 +22,7 @@ class Shell:
         await ctx.defer(True)
         bot = cast("Bot", ctx.app)
         out = bot.run_shell(self.command)
-        await ctx.respond(out)
+        await ctx.respond(out or "No response.")
 
 
 @plugin.include
@@ -34,7 +34,7 @@ class Exec:
     async def callback(self, ctx: crescent.Context) -> None:
         await ctx.defer(True)
         bot = cast("Bot", ctx.app)
-        out, ret = await bot.exec_code(self.command)
+        out, ret = await bot.exec_code(self.command, {"bot": bot})
         await ctx.respond(f"Output: ```\n{out}\n```\n\nReturn: {ret}")
 
 
