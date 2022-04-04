@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import traceback
 from asyncio import Lock
 from contextlib import asynccontextmanager, redirect_stderr, redirect_stdout
@@ -43,13 +42,6 @@ class Bot(crescent.Bot):
         me = self.get_me()
         assert me is not None
         return me
-
-    def run_shell(self, command: str) -> str:
-        f = StringIO()
-        with redirect_stderr(f):
-            with redirect_stdout(f):
-                os.system(command)
-        return f.getvalue()
 
     async def exec_code(
         self, code: str, glbls: dict[str, Any] | None = None

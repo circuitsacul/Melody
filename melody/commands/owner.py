@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from typing import TYPE_CHECKING, cast
 
 import crescent
@@ -20,9 +21,17 @@ class Shell:
 
     async def callback(self, ctx: crescent.Context) -> None:
         await ctx.defer(True)
-        bot = cast("Bot", ctx.app)
-        out = bot.run_shell(self.command)
-        await ctx.respond(out or "No response.")
+        out, err = subprocess.Popen(
+            self.command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        await ctx.respond(
+            "```\n"
+            + ((out.decode("utf-8") + err.decode("utf-8")) or "No output.")
+            + "```"
+        )
 
 
 @plugin.include
