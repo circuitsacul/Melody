@@ -40,14 +40,12 @@ class PlaySong:
         bot = cast("Bot", ctx.app)
         assert ctx.guild_id is not None
 
+        await ctx.defer()
+
         vc_state = bot.cache.get_voice_state(ctx.guild_id, ctx.user.id)
         if vc_state is None or vc_state.channel_id is None:
             raise MelodyErr("You're not in a voice channel.")
-        ret = await bot.join_vc(ctx.guild_id, vc_state.channel_id)
-        if ret is True:
-            await ctx.respond(f"Connected to <#{vc_state.channel_id}>.")
-        else:
-            await ctx.defer()
+        await bot.join_vc(ctx.guild_id, vc_state.channel_id)
 
         source = await bot.play_url(ctx.guild_id, self.url)
         await ctx.respond(
