@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import os
+import traceback
 from asyncio import Lock
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, redirect_stderr, redirect_stdout
 from dataclasses import dataclass
-from typing import AsyncIterator
+from io import StringIO
+from textwrap import indent
+from typing import Any, AsyncIterator
 
 import crescent
 import hikari
@@ -32,12 +36,39 @@ class Bot(crescent.Bot):
         self.players: dict[int, Player] = {}
         self.locks: dict[int, Lock] = {}
         self.plugins.load("melody.commands.music")
+        self.plugins.load("melody.commands.owner")
 
     @property
     def me(self) -> hikari.OwnUser:
         me = self.get_me()
         assert me is not None
         return me
+
+    def run_shell(self, command: str) -> str:
+        f = StringIO()
+        with redirect_stdout(f), redirect_stderr(f):
+            os.system(command)
+        return f.getvalue()
+
+    async def exec_code(
+        self, code: str, glbls: dict[str, Any] | None = None
+    ) -> tuple[str, Any]:
+        code = indent(code, "    ")
+        code = (
+            f"async def _async_internal_exec_func_wrap():\n{code}\n\nresult="
+            "_async_internal_exec_func_wrap()"
+        )
+
+        lcls: dict[str, Any] = {}
+        f = StringIO()
+        with (redirect_stdout(f), redirect_stderr(f)):
+            try:
+                exec(code, glbls, lcls)
+                result = await lcls["result"]
+            except Exception:
+                return traceback.format_exc(), None
+
+        return f.getvalue(), result
 
     @asynccontextmanager
     async def lock(self, guild: int) -> AsyncIterator[None]:

@@ -10,7 +10,7 @@ from typing import Any, List, Optional, cast
 @dataclass
 class Config:
     token: str = "DISCORD TOKEN"
-    owners: List[str] = field(default_factory=list)
+    owners: List[int] = field(default_factory=list)
     guild: Optional[int] = None
     theme: int = 0x9457CE
 
