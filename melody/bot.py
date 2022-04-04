@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import traceback
 from asyncio import Lock
 from contextlib import asynccontextmanager, redirect_stderr, redirect_stdout
@@ -10,8 +11,9 @@ from typing import Any, AsyncIterator
 
 import crescent
 import hikari
-from songbird import Queue, Source, ytdl
+from songbird import Queue, Source, get_playlist, ytdl
 from songbird.hikari import Voicebox
+from songbird.playlist import YoutubeVideo
 
 from melody.exceptions import MelodyErr
 
@@ -74,6 +76,13 @@ class Bot(crescent.Bot):
             lock.release()
             # TODO: use a weakref for locks
 
+    async def verify_vc_loop(self) -> None:
+        while True:
+            for guild in list(self.players.keys()):
+                await self.verify_vc(guild)
+                await asyncio.sleep(0.5)
+            await asyncio.sleep(60)
+
     async def verify_vc(self, guild: int) -> None:
         async with self.lock(guild):
             voice = self.players.get(guild)
@@ -126,16 +135,24 @@ class Bot(crescent.Bot):
 
         return True
 
-    async def play_url(self, guild: int, url: str) -> Source:
+    async def play_url(
+        self, guild: int, url: str
+    ) -> Source | list[YoutubeVideo]:
         async with self.lock(guild):
             voice = self.players.get(guild)
             if not voice:
                 raise MelodyErr("I am not in a voice channel!")
-            if len(voice.queue) >= 10:
-                raise MelodyErr("Too many songs in queue!")
+            if "playlist" in url:
+                try:
+                    sources = await get_playlist(url)
+                except Exception:
+                    pass
+                else:
+                    voice.queue.extend(sources)
+                    return sources
             try:
                 source = await ytdl(url)
             except Exception:
-                raise MelodyErr("Invalid URL!")
+                raise MelodyErr("Invalid YouTube URL!")
             voice.queue.append(source)
         return source
