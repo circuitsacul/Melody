@@ -74,14 +74,6 @@ class Bot(crescent.Bot):
             lock.release()
             # TODO: use a weakref for locks
 
-    async def on_next(self, *args, **kwargs) -> None:
-        print("Playing next")
-        print(args, kwargs)
-
-    async def on_fail(self, *args, **kwargs) -> None:
-        print("Failed to play")
-        print(args, kwargs)
-
     async def verify_vc(self, guild: int) -> None:
         async with self.lock(guild):
             voice = self.players.get(guild)
@@ -114,9 +106,7 @@ class Bot(crescent.Bot):
             voice = await Voicebox.connect(
                 self, hikari.Snowflake(guild), hikari.Snowflake(channel)
             )
-            self.players[guild] = Player(
-                voice, Queue(voice.driver, self.on_next, self.on_fail)
-            )
+            self.players[guild] = Player(voice, Queue(voice.driver))
         return True
 
     async def leave_vc(self, guild: int) -> bool:
