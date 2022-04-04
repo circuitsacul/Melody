@@ -1,6 +1,6 @@
 from __future__ import annotations
-import asyncio
 
+import asyncio
 import traceback
 from asyncio import Lock
 from contextlib import asynccontextmanager, redirect_stderr, redirect_stdout
@@ -11,9 +11,9 @@ from typing import Any, AsyncIterator
 
 import crescent
 import hikari
-from songbird import Queue, Source, ytdl, get_playlist
-from songbird.playlist import YoutubeVideo
+from songbird import Queue, Source, get_playlist, ytdl
 from songbird.hikari import Voicebox
+from songbird.playlist import YoutubeVideo
 
 from melody.exceptions import MelodyErr
 

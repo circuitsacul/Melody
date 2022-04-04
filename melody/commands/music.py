@@ -162,11 +162,7 @@ class SkipTrack:
 @crescent.hook(vc_match)
 @crescent.command(name="seek", description="Seek to a specific time.")
 class SeekTrack:
-    seconds = crescent.option(
-        int,
-        "The time to seek to.",
-        min_value=0,
-    )
+    seconds = crescent.option(int, "The time to seek to.", min_value=0)
 
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -208,7 +204,7 @@ class ShowQueue:
             if isawaitable(meta):
                 meta = await meta
             infostr = f"{x}. {song_infostr(meta)}"
-            if (current_len + len(infostr)) + 2*len(upcoming) > 2000:
+            if (current_len + len(infostr)) + 2 * len(upcoming) > 2000:
                 upcoming.append("And others...")
                 break
             current_len += len(infostr)
@@ -258,17 +254,17 @@ class ShowNowPlaying:
         current = str(datetime.timedelta(seconds=int(state.position)))
         total = str(datetime.timedelta(seconds=int(np.metadata.duration or 0)))
 
-        embed = hikari.Embed(
-            title=np.metadata.title,
-            color=CONFIG.theme,
-            description=(
-                f"Duration: {current}/{total}\n"
-                f"Volume: {state.volume*100}%"
-            ),
-            url=np.metadata.source_url,
-        ).set_footer(
-            text=np.metadata.artist or "Unkown Artist",
-        ).set_thumbnail(
-            np.metadata.thumbnail,
+        embed = (
+            hikari.Embed(
+                title=np.metadata.title,
+                color=CONFIG.theme,
+                description=(
+                    f"Duration: {current}/{total}\n"
+                    f"Volume: {state.volume*100}%"
+                ),
+                url=np.metadata.source_url,
+            )
+            .set_footer(text=np.metadata.artist or "Unkown Artist")
+            .set_thumbnail(np.metadata.thumbnail)
         )
         await ctx.respond(embed=embed)
