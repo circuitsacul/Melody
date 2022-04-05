@@ -36,6 +36,12 @@ async def on_err(err: MelodyErr, ctx: crescent.Context) -> None:
 @crescent.command(name="play", description="Play a song from URL.")
 class PlaySong:
     url = crescent.option(str, "The URL of the song to play.")
+    is_playlist = crescent.option(
+        bool,
+        "Whether the URL is a playlist.",
+        default=False,
+        name="is-playlist",
+    )
 
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -48,7 +54,9 @@ class PlaySong:
             raise MelodyErr("You're not in a voice channel.")
         await bot.join_vc(ctx.guild_id, vc_state.channel_id)
 
-        source = await bot.play_url(ctx.guild_id, self.url)
+        source = await bot.play_url(
+            ctx.guild_id, self.url, is_playlist=self.is_playlist
+        )
         if isinstance(source, list):
             await ctx.respond(
                 "Added {} songs to queue.".format(len(source)), ephemeral=True

@@ -136,13 +136,13 @@ class Bot(crescent.Bot):
         return True
 
     async def play_url(
-        self, guild: int, url: str
+        self, guild: int, url: str, is_playlist: bool = False
     ) -> Source | list[YoutubeVideo]:
         async with self.lock(guild):
             voice = self.players.get(guild)
             if not voice:
                 raise MelodyErr("I am not in a voice channel!")
-            if "playlist" in url:
+            if "playlist" in url or is_playlist:
                 try:
                     sources = await get_playlist(url)
                 except Exception:
@@ -150,9 +150,12 @@ class Bot(crescent.Bot):
                 else:
                     voice.queue.extend(sources)
                     return sources
-            try:
-                source = await ytdl(url)
-            except Exception:
-                raise MelodyErr("Invalid YouTube URL!")
-            voice.queue.append(source)
-        return source
+            if not is_playlist:
+                try:
+                    source = await ytdl(url)
+                except Exception:
+                    raise MelodyErr("Invalid YouTube URL!")
+                else:
+                    voice.queue.append(source)
+                    return source
+            raise MelodyErr("URL is not a playlist!")
