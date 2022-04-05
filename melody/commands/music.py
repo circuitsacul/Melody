@@ -268,7 +268,7 @@ class ShowNowPlaying:
                 color=CONFIG.theme,
                 description=(
                     f"Duration: {current}/{total}\n"
-                    f"Volume: {state.volume*100}%"
+                    f"Volume: {int(state.volume*100)}%"
                 ),
                 url=np.metadata.source_url,
             )
