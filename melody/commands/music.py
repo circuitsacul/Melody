@@ -25,7 +25,7 @@ def song_infostr(meta) -> str:
 
 
 @plugin.include
-@crescent.catch(MelodyErr)
+@crescent.catch_command(MelodyErr)
 async def on_err(err: MelodyErr, ctx: crescent.Context) -> None:
     await ctx.respond(err.msg, ephemeral=True)
 
