@@ -13,7 +13,7 @@ license = "MIT"
 python = "^3.8,<3.11"
 hikari = "^2.0.0-alpha.108"
 hikari-crescent = "^0.1.0"
-songbird-py = "^0.1.6"
+songbird-py = "^0.1.7"
 apgorm = "^1.0.0b11"
 
 [tool.poetry.dev-dependencies]
