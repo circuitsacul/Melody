@@ -10,7 +10,7 @@ from .checks import owner_only
 if TYPE_CHECKING:
     from melody.bot import Bot
 
-plugin = crescent.Plugin("owner")
+plugin = crescent.Plugin()
 
 
 @plugin.include
