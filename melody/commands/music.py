@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from melody.bot import Bot
 
 
-plugin = crescent.Plugin("music")
+plugin = crescent.Plugin()
 
 
 def song_infostr(meta) -> str:
