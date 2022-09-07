@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, cast
 
 import crescent
 
-from .checks import owner_only
+from ._checks import owner_only
 
 if TYPE_CHECKING:
     from melody.bot import Bot

@@ -36,8 +36,7 @@ class Bot(crescent.Bot):
 
         self.players: dict[int, Player] = {}
         self.locks: dict[int, Lock] = {}
-        self.plugins.load("melody.commands.music")
-        self.plugins.load("melody.commands.owner")
+        self.plugins.load_folder("melody.commands")
 
     @property
     def me(self) -> hikari.OwnUser:

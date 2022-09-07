@@ -10,7 +10,7 @@ import hikari
 from melody.config import CONFIG
 from melody.exceptions import MelodyErr
 
-from .checks import guild_only, vc_match
+from ._checks import vc_match
 
 if TYPE_CHECKING:
     from melody.bot import Bot
@@ -31,9 +31,10 @@ async def on_err(err: MelodyErr, ctx: crescent.Context) -> None:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="play", description="Play a song from URL.")
+@crescent.command(
+    name="play", description="Play a song from URL.", dm_enabled=False
+)
 class PlaySong:
     url = crescent.option(str, "The URL of the song to play.")
     is_playlist = crescent.option(
@@ -68,10 +69,11 @@ class PlaySong:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
 @crescent.command(
-    name="leave", description="Clear the queue and leave the voice channel."
+    name="leave",
+    description="Clear the queue and leave the voice channel.",
+    dm_enabled=False,
 )
 class Leave:
     async def callback(self, ctx: crescent.Context) -> None:
@@ -86,10 +88,11 @@ class Leave:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
 @crescent.command(
-    name="volume", description="Set the volume of the current song."
+    name="volume",
+    description="Set the volume of the current song.",
+    dm_enabled=False,
 )
 class SetVolume:
     volume = crescent.option(
@@ -115,9 +118,10 @@ class SetVolume:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="pause", description="Pause the current song.")
+@crescent.command(
+    name="pause", description="Pause the current song.", dm_enabled=False
+)
 class PauseQueue:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -132,9 +136,10 @@ class PauseQueue:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="resume", description="Resume the current song.")
+@crescent.command(
+    name="resume", description="Resume the current song.", dm_enabled=False
+)
 class ResumeQueue:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -149,9 +154,10 @@ class ResumeQueue:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="skip", description="Skip the current song.")
+@crescent.command(
+    name="skip", description="Skip the current song.", dm_enabled=False
+)
 class SkipTrack:
     async def callback(self, ctx: crescent.Context) -> None:
         bot = cast("Bot", ctx.app)
@@ -166,9 +172,10 @@ class SkipTrack:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.hook(vc_match)
-@crescent.command(name="seek", description="Seek to a specific time.")
+@crescent.command(
+    name="seek", description="Seek to a specific time.", dm_enabled=False
+)
 class SeekTrack:
     seconds = crescent.option(int, "The time to seek to.", min_value=0)
 
@@ -188,9 +195,10 @@ class SeekTrack:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.command(
-    name="queue", description="Show the currently playing and upcoming songs."
+    name="queue",
+    description="Show the currently playing and upcoming songs.",
+    dm_enabled=False,
 )
 class ShowQueue:
     async def callback(self, ctx: crescent.Context) -> None:
@@ -240,9 +248,10 @@ class ShowQueue:
 
 
 @plugin.include
-@crescent.hook(guild_only)
 @crescent.command(
-    name="nowplaying", description="Show the currently playing song."
+    name="nowplaying",
+    description="Show the currently playing song.",
+    dm_enabled=False,
 )
 class ShowNowPlaying:
     async def callback(self, ctx: crescent.Context) -> None:
