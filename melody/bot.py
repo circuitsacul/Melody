@@ -91,6 +91,8 @@ class Bot(crescent.Bot):
                 )
             ) is None:
                 leave = True
+            else:
+                leave = False
 
             if leave:
                 await self.leave_vc(guild)
