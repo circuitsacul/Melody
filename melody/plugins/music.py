@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, cast
 
 import crescent
 import hikari
+from crescent.ext import tasks
 
 from melody.config import CONFIG
 from melody.exceptions import MelodyErr
@@ -17,6 +18,14 @@ if TYPE_CHECKING:
 
 
 plugin = crescent.Plugin()
+
+
+@plugin.include
+@tasks.loop(seconds=60)
+async def verify_vcs() -> None:
+    bot = cast("Bot", plugin.app)
+    for guild in bot.players:
+        await bot.verify_vc(guild)
 
 
 def song_infostr(meta) -> str:
