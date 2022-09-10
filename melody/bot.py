@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import traceback
 from asyncio import Lock
 from contextlib import asynccontextmanager, redirect_stderr, redirect_stdout
@@ -36,7 +35,7 @@ class Bot(crescent.Bot):
 
         self.players: dict[int, Player] = {}
         self.locks: dict[int, Lock] = {}
-        self.plugins.load_folder("melody.commands")
+        self.plugins.load_folder("melody.plugins")
 
     @property
     def me(self) -> hikari.OwnUser:
@@ -75,31 +74,29 @@ class Bot(crescent.Bot):
             lock.release()
             # TODO: use a weakref for locks
 
-    async def verify_vc_loop(self) -> None:
-        while True:
-            for guild in list(self.players.keys()):
-                await self.verify_vc(guild)
-                await asyncio.sleep(0.5)
-            await asyncio.sleep(60)
-
     async def verify_vc(self, guild: int) -> None:
         async with self.lock(guild):
-            voice = self.players.get(guild)
-            if not voice:
+            if not (voice := self.players.get(guild)):
                 return
+
             if not voice.voicebox.is_alive:
+                leave = True
+            elif not self.voice.connections.get(hikari.Snowflake(guild)):
+                leave = True
+            elif not self.cache.get_voice_state(guild, self.me.id):
+                leave = True
+            elif (
+                channel := self.cache.get_guild_channel(
+                    voice.voicebox.channel_id
+                )
+            ) is None:
+                leave = True
+
+            if leave:
                 await self.leave_vc(guild)
                 return
-            if not self.voice.connections.get(hikari.Snowflake(guild)):
-                await self.leave_vc(guild)
-                return
-            if not self.cache.get_voice_state(guild, self.me.id):
-                await self.leave_vc(guild)
-                return
-            channel = self.cache.get_guild_channel(voice.voicebox.channel_id)
-            if channel is None:
-                await self.leave_vc(guild)
-                return
+
+            assert channel
             connected = self.cache.get_voice_states_view_for_channel(
                 channel.guild_id, channel
             )
