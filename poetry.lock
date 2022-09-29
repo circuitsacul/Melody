@@ -285,7 +285,7 @@ speedups = ["Brotli (>=1.0,<2.0)", "aiodns (>=3.0,<4.0)", "cchardet (>=2.1,<3.0)
 
 [[package]]
 name = "hikari-crescent"
-version = "0.3.2"
+version = "0.3.5"
 description = "🌕 A command handler for Hikari that keeps your project neat and tidy."
 category = "main"
 optional = false
@@ -677,7 +677,7 @@ websockets = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.11"
-content-hash = "20496589a206c1281bf83e18efe82c09411b3ec253a9efbbf4c0685df545bf97"
+content-hash = "395e6985c7df380659a33eec78198c3669cd19daf8323e39ee0fa505cc4ed74a"
 
 [metadata.files]
 aiohttp = [
@@ -1146,8 +1146,8 @@ hikari = [
     {file = "hikari-2.0.0.dev110.tar.gz", hash = "sha256:0a455156a62228a21b7135c0ad081892f05e3d8a84678997f683eee787b4c991"},
 ]
 hikari-crescent = [
-    {file = "hikari-crescent-0.3.2.tar.gz", hash = "sha256:3937dbb2a8adede849f054e717dc0f5ade5c65565d52afa9daa373fefb7323ef"},
-    {file = "hikari_crescent-0.3.2-py3-none-any.whl", hash = "sha256:67b9adff60a2ca6ae44e3040f385bf113ea812352112f0ed7fc1e7de3c76277e"},
+    {file = "hikari-crescent-0.3.5.tar.gz", hash = "sha256:f642c506dc08f4c247bd79b5b9769ab5115bf87242e4962aaacfb976195856fd"},
+    {file = "hikari_crescent-0.3.5-py3-none-any.whl", hash = "sha256:471d348d0088d6bea605ceafaa16616a09840c649e8e70376f9ee10abecd7c35"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
