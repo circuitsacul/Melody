@@ -14,7 +14,7 @@ python = "^3.8,<3.11"
 hikari = "^2.0.0.dev110"
 hikari-crescent = "^0.3.0"
 songbird-py = "^0.1.6"
-apgorm = "^1.0.0b11"
+apgorm = "^1.0.0b13"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
